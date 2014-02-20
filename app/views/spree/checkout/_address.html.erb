@@ -8,15 +8,15 @@
   <legend><%= t(address_type + "_address")%></legend>
   <% if address_type == 'shipping' && !Spree::AddressBook::Config[:disable_bill_address] %>
     <p class="field checkbox"  data-hook="use_billing">
-      <%= check_box_tag 'order[use_billing]', '1', (!(@order.bill_address.empty? && @order.ship_address.empty?) && @order.bill_address.same_as?(@order.ship_address)) %> 
+      <%= check_box_tag 'order[use_billing]', '1', @order.ship_address.empty? %> 
       <%= label_tag :order_use_billing, t(:use_billing_address), :id => 'use_billing' %>
     </p>
   <% end %>
 
   <% if @addresses.present? %>
     <div class="select_address">
-      <%= form.select "#{address_name}_id",  @addresses.map{ |a| [a, a.id] }.unshift(["-- Select an existing address --", nil]) %>
-      <%= link_to "Or enter a new #{address_type} address", "#", id: "new_#{address_type}_address", data: {active: 1} %>
+      <%= form.select "#{address_name}_id",  @addresses.map{ |a| [a, a.id] }, include_blank: "-- Select an existing address --" %>
+      <%= link_to "Or enter a new #{address_type} address", "#", id: "new_#{address_type}_address" %>
     </div>
   <% end %>
 
